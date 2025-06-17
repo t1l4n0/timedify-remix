@@ -13,7 +13,7 @@
     "config:use": "shopify app config use",
     "deploy": "shopify app deploy",
     "dev": "shopify app dev",
-    "docker-start": "npm run setup && npm run start",
+    "docker-start": "npm run setup && node start-server.js",
     "env": "shopify app env",
     "generate": "shopify app generate",
     "graphql-codegen": "graphql-codegen",
@@ -21,7 +21,8 @@
     "prisma": "prisma",
     "setup": "prisma generate && prisma migrate deploy",
     "shopify": "shopify",
-    "start": "remix-serve ./build/server/index.js",
+    "start": "node start-server.js",
+    "start:original": "remix-serve ./build/server/index.js",
     "vite": "vite"
   },
   "resolutions": {

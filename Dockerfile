@@ -1,11 +1,14 @@
 FROM node:18-alpine
 RUN apk add --no-cache openssl
 
-EXPOSE 3000
+EXPOSE 8080
 
 WORKDIR /app
 
+# Umgebungsvariablen für korrekte Portbindung
 ENV NODE_ENV=production
+ENV PORT=8080
+# HOST wird im Startup-Script gesetzt
 
 COPY package.json package-lock.json* ./
 
@@ -18,4 +21,8 @@ COPY . .
 
 RUN npm run build
 
-CMD ["npm", "run", "docker-start"]
+# Prisma Client vor dem Start generieren
+RUN npx prisma generate
+
+# Direkt den Server mit expliziten Host- und Port-Parametern starten
+CMD ["sh", "-c", "npx prisma generate && npx prisma migrate deploy && node node_modules/@remix-run/serve/dist/cli.js build/server/index.js --host 0.0.0.0 --port 8080"]

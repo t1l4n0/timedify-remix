@@ -1,0 +1,31 @@
+app = "timedify-remix"
+primary_region = "fra"
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  HOST = "0.0.0.0"
+  NODE_ENV = "production"
+
+# Stellen Sie sicher, dass die Anwendung auf Port 8080 läuft
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 200
+    soft_limit = 150
+
+# Einrichtung von Persistent Volume für SQLite
+[mounts]
+  source = "timedify_data"
+  destination = "/app/data"
